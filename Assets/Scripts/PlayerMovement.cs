@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.U2D.Path.GUIFramework;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -9,6 +6,7 @@ public class PlayerMovement : MonoBehaviour
     public CharacterController2D controller;
     public Rigidbody2D rigidBody;
     public AudioClip jumpAudio;
+    public AudioClip attackAudio;
     public Animator animator;
     public Transform attackPoint;
     public LayerMask enemyLayers;
@@ -20,6 +18,7 @@ public class PlayerMovement : MonoBehaviour
     private float horizontalMove;
     public float runSpeed;
     public float attackRange;
+    public int apples;
     public float damage;
     public float attackRate;
     private float nextAttackTime;
@@ -29,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
     {
         runSpeed = 25f;
         damage = 10f;
+        apples = 0;
         attackRate = 3f;
         attackRange = 0.5f;
         nextAttackTime = 0f;
@@ -36,6 +36,8 @@ public class PlayerMovement : MonoBehaviour
         hasSword = false;
         jump = false;
         rigidBody = GetComponent<Rigidbody2D>();
+
+        GameObject.FindGameObjectWithTag("OpeningDialogue").GetComponent<DialogueTrigger>().TriggerDialogue();
     }
 
     // Update is called once per frame
@@ -50,7 +52,7 @@ public class PlayerMovement : MonoBehaviour
         {
             jump = true;
             animator.SetBool("Jump", true);
-            AudioManager.Instance.Play(jumpAudio, transform);
+            AudioManager.Instance.Play(jumpAudio, this.transform);
         }
 
         if(Time.time >= nextAttackTime)
@@ -58,8 +60,14 @@ public class PlayerMovement : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.F))
             {
                 Attack();
+                AudioManager.Instance.Play(attackAudio, this.transform, 0.6f);
                 nextAttackTime = Time.time + (1f / attackRate);
             }
+        }
+
+        if(apples == 2)
+        {
+            GameObject.FindGameObjectWithTag("AfterEatingApples").GetComponent<DialogueTrigger>().TriggerDialogue();
         }
         
     }

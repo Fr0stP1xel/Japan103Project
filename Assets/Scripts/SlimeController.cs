@@ -6,7 +6,7 @@ using UnityEngine;
 public class SlimeController : MonoBehaviour
 {
 
-    float maxHealth;
+    public float maxHealth = 20;
     float currentHealth;
     public Animator animator;
     public bool moveRight;
@@ -16,7 +16,6 @@ public class SlimeController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        maxHealth = 20;
         speed = 0.7f;
         currentHealth = maxHealth;
     }

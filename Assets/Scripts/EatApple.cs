@@ -12,6 +12,7 @@ public class EatApple : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             AudioManager.Instance.Play(clip, collision.GetComponent<PlayerMovement>().transform, 0.4f);
+            collision.GetComponent<PlayerMovement>().apples += 1;
             Destroy(gameObject);
         }
     }
